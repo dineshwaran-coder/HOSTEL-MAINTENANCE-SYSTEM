@@ -658,3 +658,6 @@ app.listen(PORT, async () => {
     console.error('Database auto-initialization failed:', err);
   }
 });
+
+module.exports = app;
+
