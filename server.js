@@ -647,17 +647,18 @@ app.post('/api/simulate-step', async (req, res) => {
   }
 });
 
-// Start server
-app.listen(PORT, async () => {
-  console.log(`Server is running on port ${PORT}`);
-  try {
-    console.log('Auto-initializing database on startup...');
-    await initializeDatabase();
-    console.log('Database auto-initialization successful.');
-  } catch (err) {
-    console.error('Database auto-initialization failed:', err);
-  }
-});
+// Start server if run directly
+if (require.main === module) {
+  app.listen(PORT, async () => {
+    console.log(`Server is running on port ${PORT}`);
+    try {
+      console.log('Auto-initializing database on startup...');
+      await initializeDatabase();
+      console.log('Database auto-initialization successful.');
+    } catch (err) {
+      console.error('Database auto-initialization failed:', err);
+    }
+  });
+}
 
 module.exports = app;
-

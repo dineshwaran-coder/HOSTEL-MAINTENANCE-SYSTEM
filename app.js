@@ -6,6 +6,17 @@ window.addEventListener('error', (event) => {
   alert(msg);
 });
 
+// Safe Lucide icons renderer (prevents ReferenceError if CDN script fails or is slow to load)
+function safeCreateIcons() {
+  if (typeof lucide !== 'undefined' && typeof lucide.createIcons === 'function') {
+    try {
+      lucide.createIcons();
+    } catch (e) {
+      console.warn('Lucide icon creation warning:', e);
+    }
+  }
+}
+
 // Application state with initial seeds
 let state = {
   complaints: [],
@@ -414,7 +425,7 @@ function navigateToPage(pageId) {
   if (pageId === 'worker-profile') renderWorkerProfile();
 
   // Refresh icons
-  lucide.createIcons();
+  safeCreateIcons();
 }
 
 /* ================== AUTHENTICATION FLOW ================== */
@@ -611,7 +622,7 @@ function loginRedirect(role, profile) {
     });
   });
 
-  lucide.createIcons();
+  safeCreateIcons();
 }
 
 /* ================== STUDENT PORTAL LOGIC ================== */
@@ -1366,7 +1377,7 @@ function renderAdminWorkers() {
     container.appendChild(card);
   });
 
-  lucide.createIcons();
+  safeCreateIcons();
 
   // CRUD Listeners
   document.querySelectorAll('.btn-edit-worker').forEach(btn => {
@@ -1398,7 +1409,7 @@ function handleEditWorkerSetup(id) {
   document.getElementById('worker-form-title').textContent = 'Edit Technician';
   document.getElementById('btn-cancel-worker-edit').style.display = 'inline-flex';
   document.getElementById('btn-submit-worker-crud').innerHTML = '<i data-lucide="save"></i> Save Changes';
-  lucide.createIcons();
+  safeCreateIcons();
 }
 
 function handleCancelWorkerEdit() {
@@ -1408,7 +1419,7 @@ function handleCancelWorkerEdit() {
   document.getElementById('worker-form-title').textContent = 'Register Technician';
   document.getElementById('btn-cancel-worker-edit').style.display = 'none';
   document.getElementById('btn-submit-worker-crud').innerHTML = '<i data-lucide="user-plus"></i> Register Worker';
-  lucide.createIcons();
+  safeCreateIcons();
 }
 
 document.getElementById('btn-cancel-worker-edit').addEventListener('click', handleCancelWorkerEdit);
@@ -2093,7 +2104,7 @@ function openComplaintDetailModal(id) {
     }
   }
 
-  lucide.createIcons();
+  safeCreateIcons();
 }
 
 /* ================== WORKFLOW AUTO-SIMULATOR ================== */
@@ -2155,7 +2166,7 @@ function showToast(message, type = 'info') {
   `;
 
   document.body.appendChild(toast);
-  lucide.createIcons();
+  safeCreateIcons();
 
   setTimeout(() => {
     toast.style.animation = 'fadeOut 0.3s ease forwards';
@@ -2227,13 +2238,13 @@ function initThemeSwitcher() {
     document.body.classList.remove('light-theme');
     toggleBtn.innerHTML = '<i data-lucide="sun"></i>';
   }
-  lucide.createIcons();
+  safeCreateIcons();
 
   toggleBtn.addEventListener('click', () => {
     const isLight = document.body.classList.toggle('light-theme');
     localStorage.setItem('hostelfix_theme', isLight ? 'light' : 'dark');
     toggleBtn.innerHTML = isLight ? '<i data-lucide="moon"></i>' : '<i data-lucide="sun"></i>';
-    lucide.createIcons();
+    safeCreateIcons();
     showToast(`Switched to ${isLight ? 'Light' : 'Dark'} mode!`, 'info');
 
     // Update charts dynamic configuration
@@ -2404,7 +2415,7 @@ function showTourStep(index) {
       </div>
     `;
 
-    lucide.createIcons();
+    safeCreateIcons();
     positionTooltip(targetElement, tourTooltip, step.position);
 
     document.getElementById('btn-tour-skip').addEventListener('click', closeTour);
@@ -2622,7 +2633,7 @@ function renderWorkerJobs() {
     });
   });
 
-  lucide.createIcons();
+  safeCreateIcons();
 }
 
 // Bind worker job filter dropdown
