@@ -16,6 +16,11 @@ app.use(express.urlencoded({ limit: '50mb', extended: true }));
 // Serve frontend static files
 app.use(express.static(path.join(__dirname)));
 
+// Explicit root route handler for index.html
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'index.html'));
+});
+
 // MySQL Connection Pool
 const pool = mysql.createPool({
   host: process.env.DB_HOST || 'localhost',
